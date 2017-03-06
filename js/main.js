@@ -15,7 +15,6 @@ function init() {
   //set up the scene, the camera, and the renderer
   createScene();
 
-
   //add the lights
   createLights();
 
@@ -274,7 +273,7 @@ var AirPlane = function() {
 
   //Create the engine
   var geomEngine = new THREE.BoxGeometry(20,50,50,1,1,1);
-  var matEngine = new THREE.MeshPhongMaterial({color: Colors.white, :shading: THREE.FlatShading});
+  var matEngine = new THREE.MeshPhongMaterial({color: Colors.white, shading: THREE.FlatShading});
   var engine = new THREE.Mesh(geomEngine, matEngine);
   engine.position.x = 40;
   engine.castShadow = true;
@@ -285,7 +284,7 @@ var AirPlane = function() {
   var geomTailPlane = new THREE.BoxGeometry(15, 20, 5, 1,1,1);
   var matTailPlane = new THREE.MeshPhongMaterial({color: Colors.red, shading: THREE.FlatShading});
   var tailPlane = new THREE.Mesh(geomTailPlane, matTailPlane);
-  tail.position.set(-35, 25, 0);
+  tailPlane.position.set(-35, 25, 0);
   tailPlane.castShadow = true;
   tailPlane.receiveShadow = true;
   this.mesh.add(tailPlane);
@@ -293,7 +292,7 @@ var AirPlane = function() {
   //Create the Wing
   var geomSideWing = new THREE.BoxGeometry(40,8,150,1,1,1);
   var matSideWing = new THREE.MeshPhongMaterial({color: Colors.red, shading: THREE.FlatShading});
-  var sideWing = new THREE.(geomSideWing, matSideWing);
+  var sideWing = new THREE.Mesh(geomSideWing, matSideWing);
   sideWing.castShadow = true;
   sideWing.receiveShadow = true;
   this.mesh.add(sideWing);
@@ -301,7 +300,7 @@ var AirPlane = function() {
   //propeller
   var geomPropeller = new THREE.BoxGeometry(20,10,10,1,1,1);
   var matPropeller = new THREE.MeshPhongMaterial({color: Colors.brown, shading: THREE.FlatShading});
-  this.propeller = new THREE.MESH(geomPropeller, matPropeller);
+  this.propeller = new THREE.Mesh(geomPropeller, matPropeller);
   this.propeller.castShadow = true;
   this.propeller.receiveShadow = true;
 
@@ -327,5 +326,18 @@ function createPlane() {
   scene.add(airplane.mesh);
 }
 
+function loop() {
+  //rotate propeller, sea and sky
+  airplane.propeller.rotation.x += 0.3;
+  sea.mesh.rotation.z += .005;
+  sky.mesh.rotation.z += .01;
+
+  //render the scene
+  renderer.render(scene, camera);
+
+  //call the loop function again.
+  requestAnimationFrame(loop);
+}
+
 //To actually view a scene this must always be included.
-renderer.render(scene, camera);
+// renderer.render(scene, camera);
