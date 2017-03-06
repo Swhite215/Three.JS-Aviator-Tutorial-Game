@@ -189,7 +189,7 @@ Cloud = function() {
 
   //duplicate the geometry a random number of times
   var nBlocs = 3+Math.floor(Math.random()*3);
-  
+
   for (var i = 0; i < nBlocs; i++) {
 
     //create the mesh by cloning the geometry
@@ -214,3 +214,118 @@ Cloud = function() {
     this.mesh.add(m);
   }
 }
+
+//Define a sky object
+Sky = function() {
+  //Create an empty container
+  this.mesh = new THREE.Object3D();
+
+  //choose a number of clouds to be scattered in the sky.
+  this.nClouds = 20;
+
+  //distribute consistently based on a uniform angle.
+  var stepAngle = Math.PI*2 / this.nClouds;
+
+  //create the clouds
+  for (var i = 0; i < this.nClouds; i++) {
+    var c = new Cloud();
+
+    //set the rotation and position of each cloud.
+    //Using trigonometry
+    var a = stepAngle*i;
+    var h = 750 + Math.random()*200; //distance from center of axis and cloud itself.
+
+    //convert polar coodrinates (angle, distance) to Cartesian.
+    c.mesh.position.y = Math.sin(a)*h;
+    c.mesh.position.x = Math.cos(a)*h;
+
+    //rotate the cloud according to its position
+    c.mesh.rotation.z = a + Math.PI/2;
+
+    //set random scale for each cloud
+    var s = 1+Math.random()*2;
+    c.mesh.scale.set(s,s,s);
+
+    //do not forget to add the mesh of each cloud in the scene
+    this.mesh.add(c.mesh);
+  }
+}
+
+var sky;
+
+function createSky() {
+  sky = new Sky();
+  sky.mesh.position.y = -600;
+  scene.add(sky.mesh);
+}
+
+var AirPlane = function() {
+  //create a container
+  this.mesh = new THREE.Object3D();
+
+  //Create the cabin
+  var geomCockpit = new THREE.BoxGeometry(60, 50, 50, 1,1,1);
+  var matCockpit = new THREE.MeshPhongMaterial({color: Colors.red, shading: THREE.FlatShading});
+  var cockpit = new THREE.Mesh(geomCockpit, matCockpit);
+
+  cockpit.castShadow = true;
+  cockpit.receiveShadow = true;
+  this.mesh.add(cockpit);
+
+  //Create the engine
+  var geomEngine = new THREE.BoxGeometry(20,50,50,1,1,1);
+  var matEngine = new THREE.MeshPhongMaterial({color: Colors.white, :shading: THREE.FlatShading});
+  var engine = new THREE.Mesh(geomEngine, matEngine);
+  engine.position.x = 40;
+  engine.castShadow = true;
+  engine.receiveShadow = true;
+  this.mesh.add(engine);
+
+  //Create the tail
+  var geomTailPlane = new THREE.BoxGeometry(15, 20, 5, 1,1,1);
+  var matTailPlane = new THREE.MeshPhongMaterial({color: Colors.red, shading: THREE.FlatShading});
+  var tailPlane = new THREE.Mesh(geomTailPlane, matTailPlane);
+  tail.position.set(-35, 25, 0);
+  tailPlane.castShadow = true;
+  tailPlane.receiveShadow = true;
+  this.mesh.add(tailPlane);
+
+  //Create the Wing
+  var geomSideWing = new THREE.BoxGeometry(40,8,150,1,1,1);
+  var matSideWing = new THREE.MeshPhongMaterial({color: Colors.red, shading: THREE.FlatShading});
+  var sideWing = new THREE.(geomSideWing, matSideWing);
+  sideWing.castShadow = true;
+  sideWing.receiveShadow = true;
+  this.mesh.add(sideWing);
+
+  //propeller
+  var geomPropeller = new THREE.BoxGeometry(20,10,10,1,1,1);
+  var matPropeller = new THREE.MeshPhongMaterial({color: Colors.brown, shading: THREE.FlatShading});
+  this.propeller = new THREE.MESH(geomPropeller, matPropeller);
+  this.propeller.castShadow = true;
+  this.propeller.receiveShadow = true;
+
+  //blades
+  var geomBlade = new THREE.BoxGeometry(1,100,20,1,1,1);
+  var matBlade = new THREE.MeshPhongMaterial({color: Colors.brownDark, shading: THREE.FlatShading});
+
+  var blade = new THREE.Mesh(geomBlade, matBlade);
+  blade.position.set(8, 0, 0);
+  blade.castShadow = true;
+  blade.receiveShadow = true;
+  this.propeller.add(blade);
+  this.propeller.position.set(50,0,0);
+  this.mesh.add(this.propeller);
+}
+
+var airplane;
+
+function createPlane() {
+  airplane = new AirPlane();
+  airplane.mesh.scale.set(.25, .25, .25);
+  airplane.mesh.position.y = 100;
+  scene.add(airplane.mesh);
+}
+
+//To actually view a scene this must always be included.
+renderer.render(scene, camera);
