@@ -268,6 +268,16 @@ var AirPlane = function() {
   //Create the cabin
   var geomCockpit = new THREE.BoxGeometry(60, 50, 50, 1,1,1);
   var matCockpit = new THREE.MeshPhongMaterial({color: Colors.red, shading: THREE.FlatShading});
+
+  geomCockpit.vertices[4].y -= 10;
+  geomCockpit.vertices[4].z += 10;
+  geomCockpit.vertices[5].y -= 10;
+  geomCockpit.vertices[5].z -= 20;
+  geomCockpit.vertices[6].y += 30;
+  geomCockpit.vertices[6].z += 20;
+  geomCockpit.vertices[7].y += 30;
+  geomCockpit.vertices[7].z -= 20;
+
   var cockpit = new THREE.Mesh(geomCockpit, matCockpit);
 
   cockpit.castShadow = true;
@@ -295,6 +305,18 @@ var AirPlane = function() {
   //Create the Wing
   var geomSideWing = new THREE.BoxGeometry(40,8,150,1,1,1);
   var matSideWing = new THREE.MeshPhongMaterial({color: Colors.red, shading: THREE.FlatShading});
+
+  console.log(geomSideWing.vertices);
+  geomSideWing.vertices[0].z += 10;
+  geomSideWing.vertices[0].y -= 5;
+  geomSideWing.vertices[5].z += 20;
+  geomSideWing.vertices[5].y -= 5;
+  geomSideWing.vertices[2].z += 20;
+  geomSideWing.vertices[2].y += 5;
+  geomSideWing.vertices[7].z += 20;
+  geomSideWing.vertices[7].y += 5;
+
+
   var sideWing = new THREE.Mesh(geomSideWing, matSideWing);
   sideWing.castShadow = true;
   sideWing.receiveShadow = true;
