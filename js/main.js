@@ -11,7 +11,10 @@ var Colors = {
 window.addEventListener('load', init, false);
 
 //All main functions will be placed inside here.
-function init() {
+function init(event) {
+  //add a lsitener to the document for the mouse.
+  document.addEventListener('mousemove', handleMouseMove, false);
+
   //set up the scene, the camera, and the renderer
   createScene();
 
@@ -22,9 +25,6 @@ function init() {
   createPlane();
   createSea();
   createSky();
-
-  //add a lsitener to the document for the mouse.
-  document.addEventListener('mousemove', handleMouseMove, false);
 
   //start a loop that will update the objects' positions
   // and render the scene from each frame
@@ -47,15 +47,15 @@ function createScene() {
   // Create the scene
   scene = new THREE.Scene();
 
-  //Add a fog effect to the scene; same color as the
-  //background color used in the style sheet.
-  scene.fog = new THREE.Fog(0x551A8B, 100, 950);
-
   //Create the camera
   aspectRatio = WIDTH / HEIGHT;
   fieldOfView = 60;
   nearPlane = 1;
   farPlane = 10000;
+
+  //Add a fog effect to the scene; same color as the
+  //background color used in the style sheet.
+  scene.fog = new THREE.Fog(0xf7d9aa, 100, 950);
 
   camera = new THREE.PerspectiveCamera(
     fieldOfView, aspectRatio, nearPlane, farPlane
@@ -73,7 +73,7 @@ function createScene() {
     alpha: true,
 
     //Activate the anti-aliasing, this is less performant, but as our project is low-poly based, it should be fine.
-    antialias: true,
+    antialias: true
   });
 
   //Defiine the size of the renderer; in this case it
@@ -81,7 +81,7 @@ function createScene() {
   renderer.setSize(WIDTH, HEIGHT);
 
   //Enable shadow rendering
-  renderer.shadowMap.enable = true;
+  renderer.shadowMap.enabled = true;
 
   //Add the DOM element of the renderer to the
   //container we created in the HTML
@@ -360,7 +360,7 @@ function handleMouseMove(event) {
   //because the 2D y-axis goes the opposite direction of the 3D y-axis.
 
   var ty = 1 - (event.clientY / HEIGHT)*2;
-  mouesPos = {x:tx, y:ty};
+  mousePos = {x:tx, y:ty};
 
 }
 
@@ -370,8 +370,8 @@ function updatePlane() {
   //depending on the mouse position which ranges from between -1 and 1 on both axes
   //to achieve that we use a normalize function
 
-  var targetX = normalize(mousePos.x, -1, 1, -100, 100);
-  var targetY = normalize(mousePos.y, -1, 1, 25, 175);
+  var targetX = normalize(mousePos.x, -.75, .75, -100, 100);
+  var targetY = normalize(mousePos.y, -.75, .75, 25, 175);
 
   //update the airplane's position
   airplane.mesh.position.y = targetY;
