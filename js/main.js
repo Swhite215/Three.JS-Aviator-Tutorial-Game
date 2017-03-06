@@ -1,11 +1,11 @@
 //Declare the colors you will be using with color code
 var Colors = {
-  red: 0xf25346;
-  white: 0xd8d0d1;
-  brown: 0x59332e;
-  pink: 0xF5986E;
-  brownDark: 0x23190f;
-  blue: 0x68c3c0;
+  red: 0xf25346,
+  white: 0xd8d0d1,
+  brown: 0x59332e,
+  pink: 0xF5986E,
+  brownDark: 0x23190f,
+  blue: 0x68c3c0,
 }
 
 window.addEventListener('load', init, false);
@@ -68,10 +68,10 @@ function createScene() {
   renderer = new THREE.WebGLRenderer({
     //Allow transparency to show the gradient background
     //we defined in the CSS
-    alpha: true;
+    alpha: true,
 
     //Activate the anti-aliasing, this is less performant, but as our project is low-poly based, it should be fine.
-    antialias: true;
+    antialias: true,
   });
 
   //Defiine the size of the renderer; in this case it
@@ -96,7 +96,7 @@ function createScene() {
     WIDTH = window.innerWidth;
     renderer.setSize(WIDTH, HEIGHT);
     camera.aspect = WIDTH / HEIGHT;
-    camera.updateProjectionMatric();
+    camera.updateProjectionMatrix();
   }
 }
 
@@ -134,4 +134,42 @@ function createLights() {
   //to activate the lights, add them to the scene
   scene.add(hemisphereLight);
   scene.add(shadowLight);
+}
+
+
+//First let's define a Sea object
+Sea = function() {
+  //create the geometry or shape of the cylinder
+  //the parameters are radius top, radius bottom, height, number of segments on the radius, number of segments vertically
+  var geom = new THREE.CylinderGeometry(600, 600, 800, 40, 10);
+
+  //rotate the geometry on the x-axis
+  geom.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI/2));
+
+  //create the material
+  var mat = new THREE.MeshPhongMaterial({
+    color: Colors.blue,
+    transparent: true,
+    opacity: .6,
+    shading: THREE.FlatShading
+  });
+
+  //To create an object in Three.JS, we have to cerate a mesh which comines geometry and some material
+  this.mesh = new THREE.Mesh(geom, mat);
+
+  //Allow the sea to receive the shadows
+  this.mesh.receiveShadow = true;
+}
+
+//Create an instnace of the sea and add it to the scene
+var sea;
+
+function createSea() {
+  sea = new Sea();
+
+  //push it to bottom of the screen
+  sea.mesh.position.y = -600;
+
+  //add the mesh of the sea to the scene.
+  scene.add(sea.mesh);
 }
