@@ -461,9 +461,8 @@ function loop() {
   sky.mesh.rotation.z += .01;
 
   //update the plane on each frame
+  // airplane.pilot.updateHairs();
   updatePlane();
-
-  airplane.pilot.updateHairs();
 
   //render the scene
   renderer.render(scene, camera);
