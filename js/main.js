@@ -397,6 +397,41 @@ var Pilot = function() {
   }
   hairs.add(this.hairsTop);
 
+  //create the hairs at the side of the face
+  var hairSideGeom = new THREE.BoxGeometry(12, 4, 2);
+  hairSideGeom.applyMatrix(new THREE.Matrix4().makeTranslation(-6,0,0));
+  var hairSideR = new THREE.Mesh(hairSideGeom, hairMat);
+  var hairSideL = hairSideR.clone();
+  hairSideR.position.set(8,-2,6);
+  hairSideL.position.set(8, -2,-6);
+  hairs.add(hairSideR);
+  hairs.add(hairSideL);
+
+  //create the hairs at the back of the head
+  var hairBackGeom = new THREE.BoxGeometry(2,8,10);
+  var hairBack = new Three.Mesh(hairBackGeom, hairMat);
+  hairBack.position.set(-1,-4,0);
+  hairs.add(hairBack);
+  hairs.position.set(-5,5,0);
+
+  this.mesh.add(hairs);
+
+  var glassGeom = new THREE.BoxGeometry(5,5,5);
+  var glassMat = new THREE.MeshLambertMaterial({color: Colors.brown});
+  var glassR = new THREE.Mesh(glassGeom, glassMat);
+
+  glassR.position.set(6,0,3);
+  var glassL = glassR.clone():
+  glassL.position.z = -glassR.position.z;
+
+  var glassAGeom = new THREE.BoxGeometry(11, 1, 11);
+  var glassA = new THREE.Mesh(glassAGeom, glassMat);
+  this.mesh.add(glassR);
+  this.mesh.add(glassL);
+  this.mesh.add(glassA);
+
+  
+
 }
 
 function loop() {
