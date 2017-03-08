@@ -421,7 +421,7 @@ var Pilot = function() {
   var glassR = new THREE.Mesh(glassGeom, glassMat);
 
   glassR.position.set(6,0,3);
-  var glassL = glassR.clone():
+  var glassL = glassR.clone();
   glassL.position.z = -glassR.position.z;
 
   var glassAGeom = new THREE.BoxGeometry(11, 1, 11);
@@ -430,8 +430,28 @@ var Pilot = function() {
   this.mesh.add(glassL);
   this.mesh.add(glassA);
 
-  
+  var earGeom = new THREE.BoxGeometry(2,3,2);
+  var earL = new THREE.Mesh(glassAGeom, glassMat);
+  earL.position.set(0,0,-6);
+  var earR = earL.clone();
+  earR.position.set(0,0,6);
+  this.mesh.add(earL);
+  this.mesh.add(earR);
+}
 
+Pilot.prototype.updateHairs = function() {
+  //get the hair
+  var hairs = this.hairsTop.children;
+
+  //update them according to the angle hairs
+  var l = hairs.length;
+  for (var i = 0; i < l; i++) {
+    var h = hairs[i];
+    //each hair element will scale on cyclical basic between 75% and 100%
+    h.scale.y = .75 + Math.cos(this.angleHairs+i/3)*.25;
+  }
+  //increment the angle for the next frame
+  this.angleHairs += 0.16;
 }
 
 function loop() {
@@ -442,6 +462,8 @@ function loop() {
 
   //update the plane on each frame
   updatePlane();
+
+  airplane.pilot.updateHairs();
 
   //render the scene
   renderer.render(scene, camera);
