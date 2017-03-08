@@ -351,6 +351,54 @@ function createPlane() {
   scene.add(airplane.mesh);
 }
 
+var Pilot = function() {
+  this.mesh = new THREE.Object3D();
+  this.mesh.name = "pilot";
+
+  //angleHairs is a property used to animate hair later
+  this.angleHairs = 0;
+
+  //body of the Pilot
+  var bodyGeom = new THREE.BoxGeometry(15,15,15);
+  var bodyMat = new THREE.MeshPhongMaterial({color: Colors.brown, shading: THREE.FlatShading});
+  var body = new THREE.Mesh(bodyGeom, bodyMat);
+
+  body.position.set(2,-12,0);
+  this.mesh.add(body);
+
+  //face of the Pilot
+  var faceGeom = new THREE.BoxGeometry(10,10,10);
+  var faceMat = new THREE.MeshLambertMaterial({color: Colors.pink});
+  var face = new THREE.Mesh(faceGeom, faceMat);
+  this.mesh.add(face);
+
+  //Hair element
+  var hairGeom = new THREE.BoxGeometry(4,4,4);
+  var hairMat = new THREE.MeshLambertMaterial({color: Colors.brown});
+  var hair = new THREE.Mesh(hairGeom, hairMat);
+  //align shape of hair to bottom boundary
+  hair.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0,2,0));
+
+  //create hair container
+  var hairs = new THREE.Object3D();
+
+  //create container for top hair
+  this.hairsTop = new THREE.Object3D();
+
+  //create the hairs at the top of the head
+  for (var i = 0; i < 12; i++) {
+    var h = hair.clone();
+    var col = i%3;
+    var row = Math.floor(i/3);
+    var startPosZ = -4;
+    var startPosX = -4;
+    h.position.set(startPosX + row*4, startPosZ + col*4);
+    this.hairsTop.add(h);
+  }
+  hairs.add(this.hairsTop);
+
+}
+
 function loop() {
   //rotate propeller, sea and sky
   airplane.propeller.rotation.x += 0.3;
